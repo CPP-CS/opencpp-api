@@ -5,9 +5,11 @@ from datetime import datetime
 
 filename = 'publicScheduleData.html'
 
-courses = BeautifulSoup(open(filename, 'r').read(), 'html.parser')
+file = BeautifulSoup(open(filename, 'r').read(), 'html.parser')
 
-courses = courses.find_all('li')
+
+classList = file.find(id="class_list")
+courses = classList.find_all('li')
 print("Parsing " + str(len(courses)) + " courses")
 
 courseDataList = []
@@ -35,17 +37,7 @@ for courseData in courses:
 
   #time parse
   time = str(data[4].text)
-  if time == 'TBA':
-    startTime = 'TBA'
-    endTime = 'TBA'
-    m = False
-    tu = False
-    w = False
-    th = False
-    f = False
-    sa = False
-    su = False
-  else:
+  try: 
     startTime = calcTime(time.split('\xa0\xa0\xa0')[0].split('â€“')[0])
     endTime = calcTime(time.split('\xa0\xa0\xa0')[0].split('â€“')[1])
     days = time.split('\xa0\xa0\xa0')[1].lower()
@@ -56,15 +48,23 @@ for courseData in courses:
     f = True if days.__contains__('f') else  False
     sa = True if days.__contains__('sa') else  False
     su = True if days.__contains__('su') else  False
+  except:
+    time == 'TBA'
+    startTime = 'TBA'
+    endTime = 'TBA'
+    m = False
+    tu = False
+    w = False
+    th = False
+    f = False
+    sa = False
+    su = False
 
 
   #location parse
-  if data[5].text == 'TBA':
+  if data[5].text == 'TBA' or data[5].text == '':
     building = 'TBA'
     room = 'TBA'
-  elif data[5].text == '':
-    building = ''
-    room = ''
   else:
     location = str(data[5].text).split(' ')
     building = location[1]
