@@ -7,6 +7,8 @@ exports.initStats = async (app) => {
     raw: true,
     attributes: ["InstructorFirst", "InstructorLast", "AvgGPA"],
   });
+
+  professorList.forEach((prof) => (prof.label = prof.InstructorFirst + " " + prof.InstructorLast));
   console.log(professorList);
 
   function removeNulls(obj) {
