@@ -47,5 +47,18 @@ let Section = sequelize.define("section", {
   F: Sequelize.INTEGER,
 });
 
+let Professor = sequelize.define("professor", {
+  InstructorFirst: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  InstructorLast: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  AvgGPA: Sequelize.FLOAT,
+});
+
 exports.sequelize = sequelize;
 exports.Section = Section;
+exports.Professor = Professor;

@@ -1,4 +1,4 @@
-const gpa = {
+const GPA = {
   A: 4.0,
   "A-": 3.7,
   "B+": 3.3,
@@ -241,5 +241,5 @@ const subjectMap = {
   },
 };
 
-exports.gpa = gpa;
+exports.GPA = GPA;
 exports.subjectMap = subjectMap;

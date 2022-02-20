@@ -1,12 +1,11 @@
-const { sequelize, Section } = require("./models");
+const { Op } = require("sequelize");
+const { GPA } = require("./constants");
+const { sequelize, Section, Professor } = require("./models");
 
 exports.initStats = async (app) => {
-  let res = await sequelize.query("SELECT DISTINCT `InstructorFirst`, `InstructorLast` FROM database.sections", {
-    model: Section,
-    mapToModel: true,
-  });
-  let professorList = res.map((professor) => {
-    return { first: professor.InstructorFirst, last: professor.InstructorLast };
+  let professorList = await Professor.findAll({
+    raw: true,
+    attributes: ["InstructorFirst", "InstructorLast", "AvgGPA"],
   });
   console.log(professorList);
 
@@ -16,7 +15,7 @@ exports.initStats = async (app) => {
     }
   }
 
-  async function avgGPA(query) {
+  async function getAvgGPA(query) {
     let where = {
       Subject: query.subject,
       CourseNumber: query.courseNumber,
@@ -34,27 +33,40 @@ exports.initStats = async (app) => {
       where: where,
     });
 
+    return calcAvg(sections);
+  }
+
+  function calcAvg(sections) {
     let tEnrollment = 0;
     let tPoints = 0;
     for (let section of sections) {
       tEnrollment += section.TotalEnrollment;
-      for (let grade of Object.keys(gpa)) {
-        tPoints += gpa[grade] * section[grade];
+      for (let grade of Object.keys(GPA)) {
+        tPoints += GPA[grade] * section[grade];
       }
     }
     return tPoints / tEnrollment;
   }
+
+  // async function getSectionsByProfessor(first, last) {
+  //   await
+  // }
 
   app.get("/professorList", (req, res) => {
     res.send(professorList);
   });
 
   app.post("/avgGPA", async (req, res) => {
-    let gpa = await avgGPA(req.body);
+    let gpa = await getAvgGPA(req.body);
     res.send({ gpa: gpa });
   });
 
   app.get("/subjectMap", async (req, res) => {
     res.send(subjectMap);
+  });
+
+  app.post("professorData", async (req, res) => {
+    first = req.body.first;
+    last = req.body.last;
   });
 };
