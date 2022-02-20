@@ -1,6 +1,6 @@
 const { sequelize, Section } = require("./models");
 
-exports.initGrades = async (app) => {
+exports.initStats = async (app) => {
   let res = await sequelize.query("SELECT DISTINCT `InstructorFirst`, `InstructorLast` FROM database.sections", {
     model: Section,
     mapToModel: true,

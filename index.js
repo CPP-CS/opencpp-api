@@ -6,7 +6,7 @@ const { Section } = require("./models");
 const { query } = require("express");
 const { Op } = require("sequelize");
 const { gpa, subjectMap } = require("./constants");
-const { initGrades } = require("./grades");
+const { initGrades, initStats } = require("./stats");
 
 app.use(cors());
 app.use(express.json());
@@ -16,7 +16,7 @@ let initApp = async () => {
     res.send("Hello World!");
   });
 
-  initGrades(app);
+  initStats(app);
 
   app.listen(3000, () => console.log("app started"));
 };
