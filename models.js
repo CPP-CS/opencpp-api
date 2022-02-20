@@ -47,12 +47,5 @@ let Section = sequelize.define("section", {
   F: Sequelize.INTEGER,
 });
 
-sequelize
-  .query("SELECT DISTINCT `InstructorFirst`, `InstructorLast` FROM database.sections", {
-    model: Section,
-    mapToModel: true,
-  })
-  .then((res) => console.log(res.length));
-
 exports.sequelize = sequelize;
 exports.Section = Section;
