@@ -68,5 +68,6 @@ exports.initStats = async (app) => {
   app.post("professorData", async (req, res) => {
     first = req.body.first;
     last = req.body.last;
+    res.send({ first, last });
   });
 };
