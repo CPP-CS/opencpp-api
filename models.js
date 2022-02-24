@@ -2,8 +2,13 @@ const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize("database", process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
+  maxConcurrentQueries: 100,
   dialect: "mysql",
-  dialectOptions: { connectTimeout: 150000 },
+  dialectOptions: {
+    ssl: "Amazon RDS",
+  },
+  pool: { maxConnections: 5, maxIdleTime: 30 },
+  language: "en",
   logging: false,
 });
 
