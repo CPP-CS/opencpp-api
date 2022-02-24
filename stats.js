@@ -50,9 +50,9 @@ exports.initStats = async (app) => {
     return tPoints / tEnrollment;
   }
 
-  // async function getSectionsByProfessor(first, last) {
-  //   await
-  // }
+  async function getSectionsByProfessor(first, last) {
+    return await Section.findAll({ where: { InstructorFirst: first, InstructorLast: last } });
+  }
 
   app.get("/professorList", (req, res) => {
     res.send(professorList);
@@ -67,9 +67,12 @@ exports.initStats = async (app) => {
     res.send(subjectMap);
   });
 
-  app.post("professorData", async (req, res) => {
+  app.post("/professorSections", async (req, res) => {
+    console.log(req.body);
     first = req.body.first;
     last = req.body.last;
-    res.send({ first, last });
+    let sections = await getSectionsByProfessor(first, last);
+
+    res.send(sections);
   });
 };
