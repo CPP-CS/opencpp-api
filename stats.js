@@ -102,4 +102,11 @@ exports.initStats = async (app) => {
 
     res.send(course);
   });
+
+  app.post("/courseGPA", async (req, res) => {
+    let subject = req.body.subject;
+    let courseNumber = req.body.courseNumber;
+    let course = await Course.findOne({ where: { Subject: subject, CourseNumber: courseNumber } });
+    res.send({ avgGPA: course.AvgGPA });
+  });
 };
