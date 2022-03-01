@@ -64,6 +64,19 @@ let Professor = sequelize.define("professor", {
   AvgGPA: Sequelize.FLOAT,
 });
 
+let Course = sequelize.define("course", {
+  Subject: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  CourseNumber: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  AvgGPA: Sequelize.FLOAT,
+});
+
 exports.sequelize = sequelize;
 exports.Section = Section;
 exports.Professor = Professor;
+exports.Course = Course;
