@@ -19,4 +19,10 @@ let initApp = async () => {
   app.listen(process.env.PORT || 3000, () => console.log("app started"));
 };
 
+// prevents crash on uncaught error
+process.on("uncaughtException", (err) => {
+  console.error("There was an uncaught error", err);
+  // process.exit(1);
+});
+
 initApp();
