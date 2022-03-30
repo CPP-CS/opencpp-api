@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const { GPA } = require("./constants");
 const { sequelize, Section, Professor, Course } = require("./models");
 
@@ -17,6 +17,9 @@ exports.initStats = async (app) => {
     raw: true,
     attributes: ["Subject", "CourseNumber", "AvgGPA"],
   });
+
+  // setup term list
+  let termList = await sequelize.query("SELECT DISTINCT `Term` FROM db.sections");
 
   courseList.forEach((course) => (course.label = course.Subject + " " + course.CourseNumber));
   console.log(courseList);
