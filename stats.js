@@ -30,7 +30,7 @@ exports.initStats = async (app) => {
     }
   }
 
-  async function getAvgGPA(query) {
+  async function query(query) {
     let where = {
       Subject: query.subject,
       CourseNumber: query.courseNumber,
@@ -38,17 +38,14 @@ exports.initStats = async (app) => {
       InstructorLast: query.instructorLast,
       Term: query.term,
       InstructionMode: query.instructionMode,
-      A: {
-        [Op.ne]: null,
-      },
     };
     removeNulls(where);
     let sections = await Section.findAll({
-      attributes: ["TotalEnrollment", "A", "A-", "B", "B+", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"],
+      // attributes: ["TotalEnrollment", "A", "A-", "B", "B+", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"],
       where: where,
     });
 
-    return calcAvg(sections);
+    return sections;
   }
 
   function calcAvg(sections) {
@@ -80,8 +77,18 @@ exports.initStats = async (app) => {
   });
 
   app.post("/avgGPA", async (req, res) => {
-    let gpa = await getAvgGPA(req.body);
+    req.body.A = {
+      [Op.ne]: null,
+    };
+    let sections = await query(req.body);
+    let gpa = calcAvg(sections);
     res.send({ gpa: gpa });
+  });
+
+  app.post("/query", async (req, res) => {
+    let sections = await query(req.body);
+    console.log("Query Results: ", req.body, sections);
+    res.send({ sections: sections });
   });
 
   app.get("/subjectMap", async (req, res) => {
