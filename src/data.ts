@@ -4,6 +4,7 @@ export async function initData() {
   let dataRouter = express.Router({ mergeParams: true });
   app.use("/data", dataRouter);
   await initSectionData(dataRouter);
+  await initInstructionData(dataRouter);
   await initCourseData(dataRouter);
   await initInstructorData(dataRouter);
 }
