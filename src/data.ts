@@ -45,6 +45,38 @@ export async function initSectionData(dataRouter: Router) {
   });
 }
 
+export async function initInstructionData(dataRouter: Router) {
+  let router = express.Router({ mergeParams: true });
+  dataRouter.use("/instructions", router);
+
+  // get instruction list
+  let instructionList = await prismaClient.instructions.findMany();
+
+  router.post("/find", async (req, res, next) => {
+    let where = req.body;
+    try {
+      let instructions = await prismaClient.instructions.findMany({ where });
+      res.status(200).send(JSON.stringify(instructions));
+    } catch (e) {
+      next(e);
+    }
+  });
+
+  router.post("/findFirst", async (req, res, next) => {
+    let where = req.body;
+    try {
+      let instruction = await prismaClient.instructions.findFirst({ where });
+      res.status(200).send(JSON.stringify(instruction));
+    } catch (e) {
+      next(e);
+    }
+  });
+
+  router.post("/count", async (req, res, next) => {
+    res.status(200).send(JSON.stringify(instructionList.length));
+  });
+}
+
 export async function initCourseData(dataRouter: Router) {
   let router = express.Router({ mergeParams: true });
   dataRouter.use("/courses", router);
