@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx nodemon src/index.ts",
     "start": "npx prisma generate && npx ts-node src/index.ts",
-    "production": "npm i && npm start"
+    "production": "npm i --production=false && npm start"
   },
   "repository": {
     "type": "git",
