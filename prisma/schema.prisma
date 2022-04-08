@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model courses {
+  id              Int            @id @default(autoincrement())
+  Subject         String?
+  CourseNumber    String?
+  TotalEnrollment Int?
+  AvgGPA          Float?
+  Label           String?
+  instructions    instructions[]
+
+  @@unique([Subject, CourseNumber])
+}
+
+model instructions {
+  id              Int          @id @default(autoincrement())
+  Subject         String
+  CourseNumber    String
+  InstructorFirst String?
+  InstructorLast  String?
+  TotalEnrollment Int?
+  AvgGPA          Float?
+  courseId        Int?
+  instructorId    Int?
+  courses         courses?     @relation(fields: [courseId], references: [id])
+  instructors     instructors? @relation(fields: [instructorId], references: [id])
+  sections        sections[]
+
+  @@unique([InstructorFirst, InstructorLast, Subject, CourseNumber])
+  @@index([courseId], map: "instructions_courseId_fkey")
+  @@index([instructorId], map: "instructions_instructorId_fkey")
+}
+
+model instructors {
+  id              Int            @id @default(autoincrement())
+  InstructorFirst String?
+  InstructorLast  String?
+  TotalEnrollment Int?
+  AvgGPA          Float?
+  Label           String?
+  instructions    instructions[]
+
+  @@unique([InstructorFirst, InstructorLast])
+}
+
+model sections {
+  id              Int           @id @default(autoincrement())
+  ClassCapacity   Int?
+  ClassNumber     Int?
+  ClassTitle      String?
+  Component       String?
+  CourseNumber    String
+  EndDate         DateTime?
+  EndTime         DateTime?
+  Friday          Boolean?
+  InstructionMode String?
+  InstructorFirst String?
+  InstructorLast  String?
+  Location        String?
+  Monday          Boolean?
+  Saturday        Boolean?
+  Section         String
+  StartDate       DateTime?
+  StartTime       DateTime?
+  Subject         String
+  Sunday          Boolean?
+  Term            String?
+  Thursday        Boolean?
+  Tuesday         Boolean?
+  TotalEnrollment Int?
+  Units           Float?
+  Wednesday       Boolean?
+  A               Int?
+  Am              Int?
+  Bp              Int?
+  B               Int?
+  Bm              Int?
+  Cp              Int?
+  C               Int?
+  Cm              Int?
+  Dp              Int?
+  D               Int?
+  Dm              Int?
+  F               Int?
+  AvgGPA          Float?
+  instructionId   Int?
+  instructions    instructions? @relation(fields: [instructionId], references: [id])
+
+  @@unique([Subject, CourseNumber, Section])
+  @@index([instructionId], map: "sections_instructionId_fkey")
+}
