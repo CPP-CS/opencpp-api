@@ -8,16 +8,22 @@ datasource db {
 }
 
 model instructions {
-  id              Int        @id @default(autoincrement())
-  Subject         String?
-  CourseNumber    String?
+  id              Int          @id @default(autoincrement())
+  Subject         String
+  CourseNumber    String
   InstructorFirst String?
   InstructorLast  String?
   TotalEnrollment Int?
   AvgGPA          Float?
+  courseId        Int?
+  instructorId    Int?
+  courses         courses?     @relation(fields: [courseId], references: [id])
+  instructors     instructors? @relation(fields: [instructorId], references: [id])
   sections        sections[]
 
   @@unique([InstructorFirst, InstructorLast, Subject, CourseNumber])
+  @@index([courseId], map: "instructions_courseId_fkey")
+  @@index([instructorId], map: "instructions_instructorId_fkey")
 }
 
 model sections {
@@ -41,12 +47,12 @@ model sections {
   StartTime       DateTime?
   Subject         String
   Sunday          Boolean?
-  Term            String?
+  Term            String
   Thursday        Boolean?
   Tuesday         Boolean?
-  TotalEnrollment Int?
   Units           Float?
   Wednesday       Boolean?
+  TotalEnrollment Int?
   A               Int?
   Am              Int?
   Bp              Int?
@@ -63,6 +69,30 @@ model sections {
   instructionId   Int?
   instructions    instructions? @relation(fields: [instructionId], references: [id])
 
-  @@unique([Subject, CourseNumber, Section])
+  @@unique([Term, Subject, CourseNumber, Section])
   @@index([instructionId], map: "sections_instructionId_fkey")
+}
+
+model courses {
+  id              Int            @id @default(autoincrement())
+  Subject         String?
+  CourseNumber    String?
+  TotalEnrollment Int?
+  AvgGPA          Float?
+  Label           String?
+  instructions    instructions[]
+
+  @@unique([Subject, CourseNumber])
+}
+
+model instructors {
+  id              Int            @id @default(autoincrement())
+  InstructorFirst String?
+  InstructorLast  String?
+  TotalEnrollment Int?
+  AvgGPA          Float?
+  Label           String?
+  instructions    instructions[]
+
+  @@unique([InstructorFirst, InstructorLast])
 }

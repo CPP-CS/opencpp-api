@@ -21,7 +21,6 @@ app.use((req, res, next) => {
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
-  res.status(500).send(err.message);
 });
 
 export let prismaClient = new PrismaClient();
