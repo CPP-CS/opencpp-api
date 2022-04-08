@@ -98,7 +98,7 @@ export async function initCourseData(dataRouter: Router) {
     let where = req.body;
     try {
       let courses = await prismaClient.courses.findMany({
-        orderBy: [{ Subject: "desc", CourseNumber: "desc" }],
+        orderBy: [{ Subject: "desc" }, { CourseNumber: "desc" }],
         where,
       });
       res.status(200).send(JSON.stringify(courses));
@@ -133,7 +133,7 @@ export async function initInstructorData(dataRouter: Router) {
     let where = req.body;
     try {
       let instructors = await prismaClient.instructors.findMany({
-        orderBy: [{ InstructorFirst: "desc", InstructorLast: "desc" }],
+        orderBy: [{ InstructorFirst: "desc" }, { InstructorLast: "desc" }],
         where,
       });
       res.status(200).send(JSON.stringify(instructors));
