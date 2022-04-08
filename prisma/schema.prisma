@@ -7,47 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model courses {
-  id              Int            @id @default(autoincrement())
+model instructions {
+  id              Int        @id @default(autoincrement())
   Subject         String?
   CourseNumber    String?
-  TotalEnrollment Int?
-  AvgGPA          Float?
-  Label           String?
-  instructions    instructions[]
-
-  @@unique([Subject, CourseNumber])
-}
-
-model instructions {
-  id              Int          @id @default(autoincrement())
-  Subject         String
-  CourseNumber    String
   InstructorFirst String?
   InstructorLast  String?
   TotalEnrollment Int?
   AvgGPA          Float?
-  courseId        Int?
-  instructorId    Int?
-  courses         courses?     @relation(fields: [courseId], references: [id])
-  instructors     instructors? @relation(fields: [instructorId], references: [id])
   sections        sections[]
 
   @@unique([InstructorFirst, InstructorLast, Subject, CourseNumber])
-  @@index([courseId], map: "instructions_courseId_fkey")
-  @@index([instructorId], map: "instructions_instructorId_fkey")
-}
-
-model instructors {
-  id              Int            @id @default(autoincrement())
-  InstructorFirst String?
-  InstructorLast  String?
-  TotalEnrollment Int?
-  AvgGPA          Float?
-  Label           String?
-  instructions    instructions[]
-
-  @@unique([InstructorFirst, InstructorLast])
 }
 
 model sections {
