@@ -17,6 +17,7 @@ export async function initSectionData(dataRouter: Router) {
     let where = req.body;
     try {
       let sections = await prismaClient.sections.findMany({
+        orderBy: [{ Subject: "desc" }, { CourseNumber: "desc" }, { Section: "desc" }],
         where,
       });
       res.status(200).send(JSON.stringify(sections));
@@ -56,7 +57,15 @@ export async function initInstructionData(dataRouter: Router) {
   router.post("/find", async (req, res, next) => {
     let where = req.body;
     try {
-      let instructions = await prismaClient.instructions.findMany({ where });
+      let instructions = await prismaClient.instructions.findMany({
+        orderBy: [
+          { Subject: "desc" },
+          { CourseNumber: "desc" },
+          { InstructorFirst: "desc" },
+          { InstructorLast: "desc" },
+        ],
+        where,
+      });
       res.status(200).send(JSON.stringify(instructions));
     } catch (e) {
       next(e);
@@ -88,7 +97,10 @@ export async function initCourseData(dataRouter: Router) {
   router.post("/find", async (req, res, next) => {
     let where = req.body;
     try {
-      let courses = await prismaClient.courses.findMany({ where });
+      let courses = await prismaClient.courses.findMany({
+        orderBy: [{ Subject: "desc", CourseNumber: "desc" }],
+        where,
+      });
       res.status(200).send(JSON.stringify(courses));
     } catch (e) {
       next(e);
@@ -120,7 +132,10 @@ export async function initInstructorData(dataRouter: Router) {
   router.post("/find", async (req, res, next) => {
     let where = req.body;
     try {
-      let instructors = await prismaClient.instructors.findMany({ where });
+      let instructors = await prismaClient.instructors.findMany({
+        orderBy: [{ InstructorFirst: "desc", InstructorLast: "desc" }],
+        where,
+      });
       res.status(200).send(JSON.stringify(instructors));
     } catch (e) {
       next(e);
