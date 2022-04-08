@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon src/index.ts",
-    "start": "npx prisma generate && npx ts-node src/index.ts"
+    "start": "npx prisma generate && npx ts-node src/index.ts",
+    "production": "npm i && npm start"
   },
   "repository": {
     "type": "git",
