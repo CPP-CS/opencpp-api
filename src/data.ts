@@ -19,6 +19,9 @@ export async function initSectionData(dataRouter: Router) {
       let sections = await prismaClient.sections.findMany({
         orderBy: [{ Subject: "asc" }, { CourseNumber: "asc" }, { Section: "asc" }],
         where,
+        include: {
+          instructions: true,
+        },
       });
       res.status(200).send(JSON.stringify(sections));
     } catch (e) {
