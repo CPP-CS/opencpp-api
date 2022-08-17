@@ -8,17 +8,17 @@ datasource db {
 }
 
 model instructions {
-  id              Int          @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   Subject         String
   CourseNumber    String
-  InstructorFirst String?
-  InstructorLast  String?
-  TotalEnrollment Int?
+  InstructorFirst String
+  InstructorLast  String
+  TotalEnrollment Int         @default(0)
   AvgGPA          Float?
-  courseId        Int?
-  instructorId    Int?
-  courses         courses?     @relation(fields: [courseId], references: [id])
-  instructors     instructors? @relation(fields: [instructorId], references: [id])
+  courseId        Int
+  instructorId    Int
+  courses         courses     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  instructors     instructors @relation(fields: [instructorId], references: [id], onDelete: Cascade)
   sections        sections[]
 
   @@unique([InstructorFirst, InstructorLast, Subject, CourseNumber])
@@ -27,32 +27,32 @@ model instructions {
 }
 
 model sections {
-  id              Int           @id @default(autoincrement())
-  ClassCapacity   Int?
-  ClassNumber     Int?
-  ClassTitle      String?
-  Component       String?
+  id              Int          @id @default(autoincrement())
+  ClassCapacity   Int
+  ClassNumber     Int
+  ClassTitle      String
+  Component       String
   CourseNumber    String
-  EndDate         String?
-  EndTime         String?
-  Friday          Boolean?
-  InstructionMode String?
-  InstructorFirst String?
-  InstructorLast  String?
-  Location        String?
-  Monday          Boolean?
-  Saturday        Boolean?
+  EndDate         String
+  EndTime         String
+  Friday          Boolean
+  InstructionMode String
+  InstructorFirst String
+  InstructorLast  String
+  Location        String
+  Monday          Boolean
+  Saturday        Boolean
   Section         String
-  StartDate       String?
-  StartTime       String?
+  StartDate       String
+  StartTime       String
   Subject         String
-  Sunday          Boolean?
+  Sunday          Boolean
   Term            String
-  Thursday        Boolean?
-  Tuesday         Boolean?
-  Units           Float?
-  Wednesday       Boolean?
-  TotalEnrollment Int?
+  Thursday        Boolean
+  Tuesday         Boolean
+  Units           Float
+  Wednesday       Boolean
+  TotalEnrollment Int          @default(0)
   A               Int?
   Am              Int?
   Bp              Int?
@@ -66,8 +66,9 @@ model sections {
   Dm              Int?
   F               Int?
   AvgGPA          Float?
-  instructionId   Int?
-  instructions    instructions? @relation(fields: [instructionId], references: [id])
+  instructionId   Int
+  Graded          Boolean      @default(false)
+  instructions    instructions @relation(fields: [instructionId], references: [id], onDelete: Cascade)
 
   @@unique([Term, Subject, CourseNumber, Section])
   @@index([instructionId], map: "sections_instructionId_fkey")
@@ -75,11 +76,12 @@ model sections {
 
 model courses {
   id              Int            @id @default(autoincrement())
-  Subject         String?
-  CourseNumber    String?
-  TotalEnrollment Int?
+  Subject         String
+  CourseNumber    String
+  TotalEnrollment Int            @default(0)
   AvgGPA          Float?
-  Label           String?
+  Label           String
+  ClassTitle      String
   instructions    instructions[]
 
   @@unique([Subject, CourseNumber])
@@ -87,11 +89,11 @@ model courses {
 
 model instructors {
   id              Int            @id @default(autoincrement())
-  InstructorFirst String?
-  InstructorLast  String?
-  TotalEnrollment Int?
+  InstructorFirst String
+  InstructorLast  String
+  TotalEnrollment Int            @default(0)
   AvgGPA          Float?
-  Label           String?
+  Label           String
   instructions    instructions[]
 
   @@unique([InstructorFirst, InstructorLast])
