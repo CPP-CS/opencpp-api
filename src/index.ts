@@ -1,5 +1,6 @@
-import { ErrorRequestHandler } from "./../node_modules/@types/express-serve-static-core/index.d";
 import { PrismaClient } from "@prisma/client";
+export let prismaClient = new PrismaClient();
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -9,6 +10,7 @@ export let app = express();
 import cors from "cors";
 import compression from "compression";
 import { initData } from "./data";
+import { initConstants } from "./constants";
 
 app.use(compression());
 app.use(cors());
@@ -23,14 +25,13 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
 });
 
-export let prismaClient = new PrismaClient();
-
 let initApp = async () => {
   app.get("/", (req, res) => {
     res.send("Hello World!");
   });
 
   await initData();
+  await initConstants();
 
   app.listen(process.env.PORT || 3000, () => console.log("app started"));
 };
