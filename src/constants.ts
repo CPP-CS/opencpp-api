@@ -1,3 +1,6 @@
+import express from "express";
+import { app } from ".";
+
 export const GPA: { [key: string]: number } = {
   A: 4.0,
   Am: 3.7,
@@ -240,3 +243,53 @@ export const subjectMap = {
     },
   },
 };
+
+export let terms = {
+  "SU 2019": 2195,
+  "F 2019": 2197,
+  "W 2020": 2201,
+  "SP 2020": 2203,
+  "SU 2020": 2205,
+  "F 2020": 2207,
+  "W 2021": 2211,
+  "SP 2021": 2213,
+  "SU 2021": 2215,
+  "F 2021": 2217,
+  "W 2022": 2221,
+  "SP 2022": 2223,
+  "SU 2022": 2225,
+  "F 2022": 2227,
+  "W 2023": 2231,
+  "SP 2023": 2233,
+} as const;
+
+export let courseComponents: { [key: string]: string } = {
+  ACT: "Activity",
+  CLN: "Clinical",
+  IND: "Independent Study",
+  LAB: "Laboratory",
+  LEC: "Lecture",
+  PRA: "Practicum",
+  SEM: "Seminar",
+  SUP: "Supervision",
+  THE: "Thesis Research",
+};
+
+export let currentTerm: string = process.env.CURRENT_TERM || "";
+
+export async function initConstants() {
+  let router = express.Router({ mergeParams: true });
+  app.use("/constants", router);
+
+  router.get("/subjectMap", (req, res) => {
+    res.send(subjectMap);
+  });
+
+  router.get("/termList", (req, res) => {
+    res.send(Object.entries(terms).map((entry) => entry[0]));
+  });
+
+  router.get("/currentTerm", (req, res) => {
+    res.send(currentTerm);
+  });
+}
