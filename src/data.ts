@@ -80,6 +80,20 @@ export async function initInstructionData(dataRouter: Router) {
     }
   });
 
+  router.post("/findWithSections", async (req, res, next) => {
+    let where = req.body;
+    try {
+      let instructions = await prismaClient.instructions.findMany({
+        orderBy: [{ Subject: "asc" }, { CourseNumber: "asc" }, { InstructorFirst: "asc" }, { InstructorLast: "asc" }],
+        where,
+        include: { sections: true },
+      });
+      res.status(200).send(JSON.stringify(instructions));
+    } catch (e) {
+      next(e);
+    }
+  });
+
   router.post("/count", async (req, res, next) => {
     res.status(200).send(JSON.stringify(instructionList.length));
   });
