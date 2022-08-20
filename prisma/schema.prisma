@@ -30,28 +30,27 @@ model sections {
   id              Int          @id @default(autoincrement())
   ClassCapacity   Int
   ClassNumber     Int
-  ClassTitle      String
-  Component       String
+  Component       String?
   CourseNumber    String
-  EndDate         String
-  EndTime         String
-  Friday          Boolean
+  EndDate         String?
+  EndTime         String?
+  Friday          Boolean?
   InstructionMode String
   InstructorFirst String
   InstructorLast  String
-  Location        String
-  Monday          Boolean
-  Saturday        Boolean
+  Location        String?
+  Monday          Boolean?
+  Saturday        Boolean?
   Section         String
-  StartDate       String
-  StartTime       String
+  StartDate       String?
+  StartTime       String?
   Subject         String
-  Sunday          Boolean
+  Sunday          Boolean?
   Term            String
-  Thursday        Boolean
-  Tuesday         Boolean
-  Units           Float
-  Wednesday       Boolean
+  Thursday        Boolean?
+  Tuesday         Boolean?
+  Units           Float?
+  Wednesday       Boolean?
   TotalEnrollment Int          @default(0)
   A               Int?
   Am              Int?
@@ -81,7 +80,7 @@ model courses {
   TotalEnrollment Int            @default(0)
   AvgGPA          Float?
   Label           String
-  ClassTitle      String
+  CourseTitle     String?
   instructions    instructions[]
 
   @@unique([Subject, CourseNumber])
