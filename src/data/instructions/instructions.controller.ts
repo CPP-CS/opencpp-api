@@ -40,6 +40,7 @@ export class InstructionsController {
         InstructorLast: instruction.professor?.LastName?.valueOf() || 'Error',
         instruction: instruction.GradePoints,
         AvgGPA: instruction.AvgGPA,
+        TotalEnrollment: instruction.GradePoints,
         courseId: instruction.CourseId.valueOf(),
         instructorId: instruction.ProfessorId.valueOf(),
       };
